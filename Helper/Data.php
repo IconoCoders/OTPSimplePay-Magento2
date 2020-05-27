@@ -227,16 +227,19 @@ class Data extends AbstractHelper
     {
         $protocol = 'https';
         $baseURL = $this->urlBuilder->getBaseUrl();
-        $baseURL = str_replace('https://', '', $baseURL);
+        //$baseURL = str_replace('https://', '', $baseURL);
 
         $logPath = $this->dir->getPath('var').'/simplepay';
         if ( ! @file_exists($logPath)) {
             $this->file->mkdir($logPath);
         }
 
+        $currency = $this->currency ? $this->currency : 'HUF';
+
         $config = [
-            $this->currency.'_MERCHANT' => $this->getMerchant($this->storeId),
-            $this->currency.'_SECRET_KEY' => $this->getSecretKey($this->storeId),
+
+            $currency.'_MERCHANT' => $this->getMerchant($this->storeId),
+            $currency.'_SECRET_KEY' => $this->getSecretKey($this->storeId),
 
             'SANDBOX' => $this->getPaymentMode($this->storeId),
 
