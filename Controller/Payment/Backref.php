@@ -116,8 +116,8 @@ class Backref extends Action
         $this->customerSession = $customerSession;
         $this->messageManager = $messageManager;
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $resolver = $this->objectManager->get('Magento\Framework\Locale\Resolver');
-        $this->lang = strtolower(strstr($resolver->getLocale(), '_', true))=='hu' ? 'HU' : 'EN';
+        $resolver = $objectManager->get('Magento\Framework\Locale\Resolver');
+        $this->lang = strtolower(strstr($resolver->getLocale(), '_', true))=='hu' ? 'hu' : 'en';
 
         parent::__construct($context);
     }
@@ -133,7 +133,7 @@ class Backref extends Action
 
         $trx = new \Otp\Simplepay\SimplePayBack;
         $trx->addConfig($config);
-
+//echo "<pre>";print_r($trx);exit();
         $result = array();
         if (isset($_REQUEST['r']) && isset($_REQUEST['s'])) {
             if ($trx->isBackSignatureCheck($_REQUEST['r'], $_REQUEST['s'])) {
@@ -187,22 +187,24 @@ class Backref extends Action
     }
 
     protected function cancel($transactionId, $merchant) {
-        $this->messageManager->addError(
-            $this->lang=='hu' ? ("Ön megszakította a fizetést, próbálja meg újra. SimplePay tranzakció azonosító: $transactionId")
+        $this->messageManager->addErrorMessage(
+            $this->lang=='hu' ? ("Ön megszakította a fizetést. SimplePay tranzakció azonosító: $transactionId")
                               : ("You cancelled the payment, please try again. SimplePay transaction identifier: $transactionId")
             );
+        return $this->_redirect('checkout/cart');
+/*
         $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
         $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
         $this->order->save();
 
         return $this->_redirect('checkout/onepage/failure');
-
+*/
     }
 
     protected function fail($transactionId, $merchant) {
         $this->messageManager->addError(
             $this->lang=='hu' ? (
-                                    "Sikertelen tranzakció. A rendelés nem lett kifizetve, próbálja meg újra. ".
+                                    "Sikertelen tranzakció. A rendelés nem lett kifizetve. ".
                                     "SimplePay tranzakció azonosító: $transactionId ".
                                     "Kérjük, ellenőrizze a tranzakció során megadott adatok helyességét. Amennyiben minden adatot helyesen adott meg, a visszautasítás okának kivizsgálása érdekében kérjük, szíveskedjen kapcsolatba lépni kártyakibocsátó bankjával."
                                  )
@@ -224,7 +226,7 @@ class Backref extends Action
     protected function timeout($transactionId, $merchant) {
 
         $this->messageManager->addError(
-            $this->lang=='hu' ? ("Ön túllépte a tranzakció elindításának lehetséges maximális idejét, a rendelés nem lett kifizetve. Próbálja meg újra a fizetést. ".
+            $this->lang=='hu' ? ("Ön túllépte a tranzakció elindításának lehetséges maximális idejét, a rendelés nem lett kifizetve. ".
                                 "SimplePay tranzakció azonosító: $transactionId "
                                 )
                               : ("Timeout, please try your payment again. ".

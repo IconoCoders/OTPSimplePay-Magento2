@@ -82,7 +82,7 @@ class SimpleObject
             $trx->addGroupData('invoice', 'zip', $address->getPostcode()); ###
             $street = $address->getStreet();
             $trx->addGroupData('invoice', 'address', $street[0]); ###
-            $trx->addGroupData('invoice', 'address2', $street[1]); ###
+            if (!empty($street[1])) $trx->addGroupData('invoice', 'address2', $street[1]); ###
             if ($address->getTelephone()) $trx->addGroupData('invoice', 'phone', $address->getTelephone()); ###
         }
         $trx->formDetails['element'] = 'button';
