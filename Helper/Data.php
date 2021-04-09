@@ -250,7 +250,7 @@ class Data extends AbstractHelper
             'POST_DATA' => $_POST,
             'SERVER_DATA' => $_SERVER,
 
-            'LOGGER' => true,          //basic transaction log
+            'LOGGER' => $this->isLogEnabled($this->storeId),          //basic transaction log
             'LOG_PATH' => $logPath,    //path of log file
 
             'AUTOCHALLENGE' => true,                      //in case of unsuccessful payment with registered card run automatic challange
