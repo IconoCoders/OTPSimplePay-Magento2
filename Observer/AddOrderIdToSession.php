@@ -16,6 +16,7 @@ namespace Iconocoders\OtpSimple\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Module\Manager;
 use Magento\Customer\Model\Session\Storage as CustomerSession;
 
 /**
@@ -30,10 +31,20 @@ class AddOrderIdToSession implements ObserverInterface
      * @var CustomerSession
      */
     private $customerSession;
+    
+    /**
+     * Module Manager
+     *
+     * @var CustomerSession
+     */
+    private $moduleManager;
 
-    public function __construct(CustomerSession $customerSession)
-    {
+    public function __construct(
+        CustomerSession $customerSession,
+        Manager $moduleManager
+    ) {
         $this->customerSession = $customerSession;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -45,8 +56,10 @@ class AddOrderIdToSession implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $customerSession = $this->customerSession;
-        $order = $observer->getEvent()->getOrder();
-        $customerSession->setSimpleOrderIncrementId($order->getIncrementId());
+        if ($this->moduleManager->isOutputEnabled('Iconocoders_OtpSimple')) {
+            $customerSession = $this->customerSession;
+            $order = $observer->getEvent()->getOrder();
+            $customerSession->setSimpleOrderIncrementId($order->getIncrementId());
+        }
     }
 }
