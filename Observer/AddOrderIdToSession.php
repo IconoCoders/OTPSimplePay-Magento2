@@ -7,9 +7,9 @@
  * @category  OtpSimple
  * @package   Iconocoders
  * @author    Iconocoders <support@icoders.co>
- * @copyright 2017-2020 Iconocoders
- * @license   GNU GENERAL PUBLIC LICENSE  - https://github.com/IconoCoders/OTPSimplePay-Magento2/blob/master/LICENSE
- * @version   GIT: Release: 2.3.4
+ * @copyright 2017-2021 Iconocoders
+ * @license   MIT License - https://iconocoders.com/license/
+ * @version   GIT: Release: 2.3.51
  * @link      http://iconocoders.com
  */
 namespace Iconocoders\OtpSimple\Observer;

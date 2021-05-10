@@ -21,7 +21,7 @@
     "magento/module-backend": "*"
   },
   "type": "magento2-module",
-  "version": "2.3.5",
+  "version": "2.3.51",
   "license": [
     "OSL-3.0"
   ],
