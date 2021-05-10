@@ -227,7 +227,6 @@ class Data extends AbstractHelper
     {
         $protocol = 'https';
         $baseURL = $this->urlBuilder->getBaseUrl();
-        //$baseURL = str_replace('https://', '', $baseURL);
 
         $logPath = $this->dir->getPath('var').'/simplepay';
         if ( ! @file_exists($logPath)) {

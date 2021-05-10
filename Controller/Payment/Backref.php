@@ -133,7 +133,6 @@ class Backref extends Action
 
         $trx = new \Otp\Simplepay\SimplePayBack;
         $trx->addConfig($config);
-//echo "<pre>";print_r($trx);exit();
         $result = array();
         if (isset($_REQUEST['r']) && isset($_REQUEST['s'])) {
             if ($trx->isBackSignatureCheck($_REQUEST['r'], $_REQUEST['s'])) {
@@ -192,13 +191,6 @@ class Backref extends Action
                               : ("You cancelled the payment, please try again. SimplePay transaction identifier: $transactionId")
             );
         return $this->_redirect('checkout/cart');
-/*
-        $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
-        $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
-        $this->order->save();
-
-        return $this->_redirect('checkout/onepage/failure');
-*/
     }
 
     protected function fail($transactionId, $merchant) {
