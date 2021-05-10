@@ -82,6 +82,11 @@ class Backref extends Action
     protected $messageManager;
 
     /**
+     * @var string
+     */
+    protected $lang;
+
+    /**
      * Backref constructor.
      * @param Context $context
      * @param PageFactory $resultPageFactory
@@ -110,6 +115,9 @@ class Backref extends Action
         $this->checkoutHelper = $checkoutHelper;
         $this->customerSession = $customerSession;
         $this->messageManager = $messageManager;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $resolver = $this->objectManager->get('Magento\Framework\Locale\Resolver');
+        $this->lang = strtolower(strstr($resolver->getLocale(), '_', true))=='hu' ? 'HU' : 'EN';
 
         parent::__construct($context);
     }
@@ -121,54 +129,115 @@ class Backref extends Action
     {
         $helper = $this->dataHelper;
         $provider = $this->configProvider;
-        $values = $this->getRequest()->getParams();
+        $config = $this->dataHelper->getConfiguration();
 
-        $customerSession = $this->customerSession;
-        $incrementId = $customerSession->getSimpleOrderIncrementId();
-        $this->order->loadByIncrementId($incrementId);
-        $customerSession->setBackrefData($values);
+        $trx = new \Otp\Simplepay\SimplePayBack;
+        $trx->addConfig($config);
 
-        //SIKERES
-        if ($values['RC'] == 001 || $values['RC'] == 000) {
-            //tranzakcio ellenorzes
-            $simplebackref = new \Iconocoders\OtpSimple\SDK\SimpleBackRef(
-                $this->dataHelper->getConfiguration(),
-                $values['order_currency']
-            );
+        $result = array();
+        if (isset($_REQUEST['r']) && isset($_REQUEST['s'])) {
+            if ($trx->isBackSignatureCheck($_REQUEST['r'], $_REQUEST['s'])) {
+                $result = $trx->getRawNotification();
+                if (!empty($result)) {
+                    $orderRef = $result['o'];
+                    $transactionId = $result['t'];
+                    $merchant = $result['m'];
 
-            $simplebackref->checkResponse();
-            $responseArray = $simplebackref->backStatusArray;
-            $simpleTrxDate = $responseArray['BACKREF_DATE'];
-            $simpleTrxId = $responseArray['PAYREFNO'];
-            $simpleOrderId = $responseArray['REFNOEXT'];
-
-            $this->messageManager->addSuccess("Sikeres tranzakció! SimplePay tranzakció azonosító: $simpleTrxId. Megrendelés azonosító: $simpleOrderId / Dátum: $simpleTrxDate");
-
-            $this->order->setStatus($helper->getOrderStatus());
-            $this->order->addStatusToHistory(
-                $this->order->getStatus(),
-                'Order is waiting for IPN'
-            );
-            $this->order->save();
-
-            return $this->_redirect($provider->getDefaultSuccessPageUrl());
+                    $this->order->loadByIncrementId($orderRef);
+                    if (!empty($this->order) && !empty($result['e'])) {
+                        if ($result['e']=='SUCCESS') return $this->success($transactionId, $merchant);
+                        if ($result['e']=='CANCEL') return $this->cancel($transactionId, $merchant);
+                        if ($result['e']=='FAIL') return $this->fail( $transactionId, $merchant);
+                        if ($result['e']=='TIMEOUT') return $this->timeout($transactionId, $merchant);
+                    }
+                }
+            }
         }
-
-        //SIKERTELEN
-        else {
-            $simpleTrxDate = $values['date'];
-            $simpleTrxId = $values['payrefno'];
-            $simpleOrderId = $values['order_ref'];
-
-            $this->messageManager->addError("Sikertelen tranzakció! SimplePay tranzakció azonosító: $simpleTrxId.  Kérjük, ellenőrizze a tranzakció során megadott adatok helyességét.
-Amennyiben minden adatot helyesen adott meg, a visszautasítás okának kivizsgálása érdekében kérjük, szíveskedjen kapcsolatba lépni kártyakibocsátó bankjával! Megrendelés azonosító: $simpleOrderId / Dátum: $simpleTrxDate");
-            $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
-            $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
-            $this->order->save();
-
-            return $this->_redirect('checkout/onepage/failure');
-        }
-
+        $this->messageManager->addError("A fizetés nem sikerült. ");
         return false;
     }
+
+
+    protected function success( $transactionId, $merchant) {
+        $helper = $this->dataHelper;
+        $provider = $this->configProvider;
+        $order = $this->order;
+
+        if ( $order->getStatus() != $helper->getOrderStatus()) {
+            $this->messageManager->addSuccess(
+                $this->lang=='hu' ? ("Sikeres tranzakció. SimplePay tranzakció azonosító: $transactionId. Megrendelés azonosító: ".$this->order->getIncrementId())
+                                  : ("Successful transaction. SimplePay transaction identifier: $transactionId. Order reference: ".$this->order->getIncrementId())
+
+                );
+            $order->setStatus($helper->getOrderStatus());
+            $order->addStatusToHistory(
+                $order->getStatus(),
+                'Order is waiting for IPN'
+            );
+            $order->save();
+        } else {
+            $this->messageManager->addSuccess(
+                    $this->lang=='hu' ? ("A rendelés már fel van dolgozva. SimplePay tranzakció azonosító: ".$transactionId)
+                                      :     ("Your order is already processed. SimplePay transaction identifier: ".$transactionId)
+                    );
+        }
+
+        return $this->_redirect($provider->getDefaultSuccessPageUrl());
+
+    }
+
+    protected function cancel($transactionId, $merchant) {
+        $this->messageManager->addError(
+            $this->lang=='hu' ? ("Ön megszakította a fizetést, próbálja meg újra. SimplePay tranzakció azonosító: $transactionId")
+                              : ("You cancelled the payment, please try again. SimplePay transaction identifier: $transactionId")
+            );
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
+        $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
+        $this->order->save();
+
+        return $this->_redirect('checkout/onepage/failure');
+
+    }
+
+    protected function fail($transactionId, $merchant) {
+        $this->messageManager->addError(
+            $this->lang=='hu' ? (
+                                    "Sikertelen tranzakció. A rendelés nem lett kifizetve, próbálja meg újra. ".
+                                    "SimplePay tranzakció azonosító: $transactionId ".
+                                    "Kérjük, ellenőrizze a tranzakció során megadott adatok helyességét. Amennyiben minden adatot helyesen adott meg, a visszautasítás okának kivizsgálása érdekében kérjük, szíveskedjen kapcsolatba lépni kártyakibocsátó bankjával."
+                                 )
+                              : (
+                                    "Failed transaction. Your order has not been paid, please try again. ".
+                                    "SimplePay transaction identifier: $transactionId ".
+                                    "Please check if the details provided during the transaction are correct. If all of the details were provided correctly, please contact the bank that issued your card in order to investigate the cause of the rejection."
+                                 )
+                                 );
+
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
+        $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
+        $this->order->save();
+
+        return $this->_redirect('checkout/onepage/failure');
+
+    }
+
+    protected function timeout($transactionId, $merchant) {
+
+        $this->messageManager->addError(
+            $this->lang=='hu' ? ("Ön túllépte a tranzakció elindításának lehetséges maximális idejét, a rendelés nem lett kifizetve. Próbálja meg újra a fizetést. ".
+                                "SimplePay tranzakció azonosító: $transactionId "
+                                )
+                              : ("Timeout, please try your payment again. ".
+                                "SimplePay transaction identifier: $transactionId ")
+                              );
+
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
+        $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
+        $this->order->save();
+
+        return $this->_redirect('checkout/onepage/failure');
+
+    }
+
+
 }

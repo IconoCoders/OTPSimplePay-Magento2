@@ -1,10 +1,11 @@
 {
-  "name": "iconocoders/magento2-otp-simple-payment",
+  "name": "wildom/magento2-otp-simple-payment",
   "description": "Magento2 OTP Simple Payment",
   "keywords": [
     "magento 2",
     "otp simple",
     "iconocoders",
+    "wildom",
     "magento2",
     "payment"
   ],
@@ -12,13 +13,18 @@
     {
       "name": "Iconocoders",
       "email": "support@icoders.co"
+    },
+    {
+      "name": "Kovacs Sandor",
+      "email": "kovacss@wildom.com"
     }
   ],
   "minimum-stability": "dev",
   "require": {
     "php": "~7.1.3|~7.2.0|~7.3.0",
     "magento/framework": "*",
-    "magento/module-backend": "*"
+    "magento/module-backend": "*",
+    "otp/simplepay": "dev-master"
   },
   "type": "magento2-module",
   "version": "2.3.6",
@@ -32,5 +38,11 @@
     "psr-4": {
       "Iconocoders\\OtpSimple\\": ""
     }
+  },
+  "repositories": {
+        "otp": {
+            "type": "git",
+            "url": "ssh://gitosis@christofer.office.wildom.com/otp-simplepay.git"
+        }
   }
 }

@@ -30,7 +30,7 @@ use Magento\Framework\Exception\NotFoundException;
  */
 class Ipn extends Action implements CsrfAwareActionInterface
 {
-    const ORDER_STATUS_COMPLETE = 'COMPLETE';
+    const ORDER_STATUS_COMPLETE = 'FINISHED';
 
     /**
      * Raw Result Factory
@@ -129,41 +129,30 @@ class Ipn extends Action implements CsrfAwareActionInterface
      */
     public function execute()
     {
-        $values = $this->request->getPost();
-        if(!$values) {
-            throw new NotFoundException(__('Required IPN parameters not exists.'));
+
+        $helper = $this->helper;
+        $config = $helper->getConfiguration();
+
+
+        $json = file_get_contents('php://input');
+        $values = json_decode($json, true);
+        $trx = new \Otp\Simplepay\SimplePayIpn;
+        $trx->addConfig($config);
+
+        if ($trx->isIpnSignatureCheck($json)) {
+            if ($trx->runIpnConfirm()) {
+                $this->_setOrderStatus($values['status'], $values['orderRef']);
+                exit;//helyes valaszt ad vissza az otp-nek
+            } else {
+                $order = $this->orderFactory->create()->loadByIncrementId($values['orderRef']);
+                if (!empty($order)) {
+                    $order->addStatusToHistory($order->getStatus(),'OTP IPN error');
+                    $order->save();
+                }
+            }
         }
 
-        $this->sourceStringArray[] = $values['IPN_PID'][0];
-        $this->sourceStringArray[] = $values['IPN_PNAME'][0];
-        $this->sourceStringArray[] = $values['IPN_DATE'];
-        $this->sourceStringArray[] = date('YmdHis', time());
 
-        $hash = $this->_calculateHash();
-
-        $response = '<EPAYMENT>'.$this->sourceStringArray[3].'|'.$hash.'</EPAYMENT>';
-        $result = $this->rawResultFactory->create();
-        $result->setHeader('Content-Type', 'text/xml');
-        $result->setContents($response);
-        $this->order->loadByIncrementId($values['REFNOEXT']);
-        $this->_setOrderStatus($values['ORDERSTATUS'], $values['REFNOEXT']);
-
-        return $result;
-    }
-
-    /**
-     * Calculate Hash
-     *
-     * @return string
-     */
-    private function _calculateHash()
-    {
-        $sourceString = '';
-        foreach ($this->sourceStringArray as $source) {
-            $sourceString .= strlen($source).$source;
-        }
-
-        return $this->helper->calculateHash($sourceString);
     }
 
     /**
