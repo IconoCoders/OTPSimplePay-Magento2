@@ -36,6 +36,14 @@ class OtpSimple extends AbstractMethod
      */
     protected $_isOffline = true;
 
+    public $_isInitializeNeeded = true;
+
+    /* Ez kell ahhoz, h a vasarlas ne processing statusba keruljon (hanem pendingbe) mielott elkuldenenk az otp-hez fizetni */
+    public function isInitializeNeeded()
+    {
+        return $this->_isInitializeNeeded;
+    }
+
     /**
      * Get instructions text from config
      *

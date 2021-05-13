@@ -227,34 +227,32 @@ class Data extends AbstractHelper
     {
         $protocol = 'https';
         $baseURL = $this->urlBuilder->getBaseUrl();
-        $baseURL = str_replace('https://', '', $baseURL);
 
         $logPath = $this->dir->getPath('var').'/simplepay';
         if ( ! @file_exists($logPath)) {
             $this->file->mkdir($logPath);
         }
 
+        $currency = $this->currency ? $this->currency : 'HUF';
+
         $config = [
-            $this->currency.'_MERCHANT' => $this->getMerchant($this->storeId),
-            $this->currency.'_SECRET_KEY' => $this->getSecretKey($this->storeId),
-            'CURL' => true, //use cURL or not
+
+            $currency.'_MERCHANT' => $this->getMerchant($this->storeId),
+            $currency.'_SECRET_KEY' => $this->getSecretKey($this->storeId),
+
             'SANDBOX' => $this->getPaymentMode($this->storeId),
-            'PROTOCOL' => $protocol,
-            'BACK_REF' =>  $baseURL .'otpsimple/payment/backref',
-            'TIMEOUT_URL' =>  $baseURL . 'otpsimple/payment/timeout',
-            'GET_DATA' =>  $this->httpRequest->getParams(),
-            'POST_DATA' =>  $this->httpRequest->getPost(),
-            'SERVER_DATA' =>  $this->httpRequest->getServer(),
-            'LOGGER' => $this->isLogEnabled($this->storeId),
-            'LOG_PATH' => $logPath,
-            'DEBUG_LIVEUPDATE_PAGE' => false,
-            'DEBUG_LIVEUPDATE' => false,
-            'DEBUG_BACKREF' => $this->isDebugEnabled($this->storeId),
-            'DEBUG_IPN' => false,
-            'DEBUG_IRN' => false,
-            'DEBUG_IDN' => false,
-            'DEBUG_IOS' => false,
-            'DEBUG_ONECLICK' => false,
+
+            //common return URL
+            'URL' => $baseURL .'otpsimple/payment/backref',
+
+            'GET_DATA' => (isset($_GET['r']) && isset($_GET['s'])) ? ['r' => $_GET['r'], 's' => $_GET['s']] : [],
+            'POST_DATA' => $_POST,
+            'SERVER_DATA' => $_SERVER,
+
+            'LOGGER' => $this->isLogEnabled($this->storeId),          //basic transaction log
+            'LOG_PATH' => $logPath,    //path of log file
+
+            'AUTOCHALLENGE' => true,                      //in case of unsuccessful payment with registered card run automatic challange
         ];
 
         return $config;

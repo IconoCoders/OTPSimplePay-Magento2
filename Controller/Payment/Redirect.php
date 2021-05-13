@@ -82,6 +82,6 @@ class Redirect extends Action
         $order->loadByIncrementId($orderIncrementId);
 
         $simpleObject = new SimpleObject($order);
-        $this->getResponse()->setBody($simpleObject->redirect());
+        $this->_redirect($simpleObject->trx_result['paymentUrl']);
     }
 }
