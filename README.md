@@ -51,6 +51,12 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
    fizetés sikeres volt-e. 
 
 ----------
+> **v.2.3.51:**
+>
+> - Licensz fixek
+> - Verzió fixek
+
+>
 > **v.2.3.5:**
 >
 > - Meghallgattuk az igényeket, a modult ÚJRA ingyenesen elérhetővé tesszük a Githubob és több támogatási formát alakítunk ki. Ezzel egyidejűleg megváltozik a modul licenszelése is.
