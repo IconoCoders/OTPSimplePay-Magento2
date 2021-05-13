@@ -14,7 +14,7 @@
  */
 namespace Iconocoders\OtpSimple\Model;
 
-use Iconocoders\OtpSimple\SDK\v2\SimpleLiveUpdate;
+//use Iconocoders\OtpSimple\SDK\v2\SimpleLiveUpdate;
 use Iconocoders\OtpSimple\SDK\v2\SimplePayStart;
 
 /**
@@ -25,7 +25,7 @@ class SimpleObject
     /**
      * @var \Iconocoders\OtpSimple\Model\SimpleLiveUpdate;
      */
-    private $simpleLiveUpdate;
+   // private $simpleLiveUpdate;
 
     /**
      * @var \Iconocoders\OtpSimple\Helper\Data
@@ -91,8 +91,9 @@ class SimpleObject
             if ($address->getTelephone()) $trx->addGroupData('invoice', 'phone', $address->getTelephone()); ###
         }
 
-        $trx->formDetails['element'] = 'button';
+        $trx->formDetails['element'] = 'auto';
         $trx->runStart();
+
         $this->trx_result = $trx->getReturnData();
 
         return;
@@ -105,7 +106,7 @@ class SimpleObject
      */
     public function redirect()
     {
-        $display = $this->simpleLiveUpdate->createHtmlForm('SinglePayForm', 'auto');
-        return '<div style="display: none;">'.$display.'</div>';
+//        $display = $this->simpleLiveUpdate->createHtmlForm('SinglePayForm', 'auto');
+//        return '<div style="display: none;">'.$display.'</div>';
     }
 }
