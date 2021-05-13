@@ -21,7 +21,6 @@ use Magento\Payment\Model\Method\AbstractMethod;
  */
 class OtpSimple extends AbstractMethod
 {
-
     /**
      * Payment code
      *
@@ -38,7 +37,11 @@ class OtpSimple extends AbstractMethod
 
     public $_isInitializeNeeded = true;
 
-    /* Ez kell ahhoz, h a vasarlas ne processing statusba keruljon (hanem pendingbe) mielott elkuldenenk az otp-hez fizetni */
+    /**
+     * Set transaction to pending before start payment
+     *
+     * @return bool
+     */
     public function isInitializeNeeded()
     {
         return $this->_isInitializeNeeded;

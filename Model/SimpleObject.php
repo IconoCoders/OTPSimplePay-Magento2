@@ -26,10 +26,12 @@ class SimpleObject
      * @var \Iconocoders\OtpSimple\Model\SimpleLiveUpdate;
      */
     private $simpleLiveUpdate;
+
     /**
      * @var \Iconocoders\OtpSimple\Helper\Data
      */
     private $helper;
+
     /**
      * @var \Magento\Sales\Model\Order
      */
@@ -37,6 +39,9 @@ class SimpleObject
     private $currency;
     private $sourceStringArray = [];
 
+    /**
+     * @var array|object
+     */
     public $trx_result;
 
     /**
@@ -91,7 +96,6 @@ class SimpleObject
         $this->trx_result = $trx->getReturnData();
 
         return;
-
     }
 
     /**

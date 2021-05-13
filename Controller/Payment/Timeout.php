@@ -53,6 +53,11 @@ class Timeout extends Action
     private $customerSession;
 
     /**
+     * @var string
+     */
+    protected $lang;
+
+    /**
      * Timeout constructor.
      * @param Context $context
      * @param PageFactory $resultPageFactory
@@ -73,10 +78,16 @@ class Timeout extends Action
 		$this->resultPageFactory = $resultPageFactory;
 		$this->orderFactory = $orderFactory;
         $this->customerSession = $customerSession;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $resolver = $objectManager->get('Magento\Framework\Locale\Resolver');
+        $this->lang = strtolower(strstr($resolver->getLocale(), '_', true))=='hu' ? 'hu' : 'en';
 
 		parent::__construct($context);
 	}
 
+    /**
+     * @return mixed
+     */
 	public function execute()
 	{
         $customerSession = $this->customerSession;
@@ -85,9 +96,15 @@ class Timeout extends Action
         $order = $this->orderFactory->create()->loadByIncrementId($incrementId);
 
         if($values['redirect']) {
-            $this->messageManager->addError('Ön megszakította a fizetést!');
+            $this->messageManager->addError(
+                $this->lang=='hu' ? ("Ön megszakította a fizetést!")
+                    :     ("You have canceled the payment!")
+            );
         } else {
-            $this->messageManager->addError('Ön túllépte a tranzakció elindításának lehetséges maximális idejét!');
+            $this->messageManager->addError(
+                $this->lang=='hu' ? ("Ön túllépte a tranzakció elindításának lehetséges maximális idejét!")
+                    :     ("You have exceeded the maximum possible time to start the transaction!")
+            );
         }
 
         $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);

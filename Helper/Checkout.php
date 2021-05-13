@@ -49,6 +49,7 @@ class Checkout
             $order->registerCancellation($comment)->save();
             return true;
         }
+
         return false;
     }
 

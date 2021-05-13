@@ -149,17 +149,13 @@ class Ipn extends Action implements CsrfAwareActionInterface
                 }
             }
         }
-
-
     }
-
+    
     /**
      * Set Order Status
      *
-     * @param string $orderStatus Status
-     * @param integer $incrementId IncrementId
-     *
-     * @return void
+     * @param $orderStatus
+     * @param $incrementId
      */
     private function _setOrderStatus($orderStatus, $incrementId)
     {
@@ -172,6 +168,7 @@ class Ipn extends Action implements CsrfAwareActionInterface
             $order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
             $order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
         }
+
         $order->addStatusToHistory(
             $order->getStatus(),
             'Order has received IPN with "'.$orderStatus.'" order status'
