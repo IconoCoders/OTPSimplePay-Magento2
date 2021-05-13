@@ -9,7 +9,7 @@
  * @author    Iconocoders <support@icoders.co>
  * @copyright 2017-2021 Iconocoders
  * @license   MIT License - https://iconocoders.com/license/
- * @version   GIT: Release: 2.3.51
+ * @version   GIT: Release: 3.0.0-beta
  * @link      http://iconocoders.com
  */
 namespace Iconocoders\OtpSimple\Observer;
@@ -31,7 +31,7 @@ class AddOrderIdToSession implements ObserverInterface
      * @var CustomerSession
      */
     private $customerSession;
-    
+
     /**
      * Module Manager
      *
