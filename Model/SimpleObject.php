@@ -13,8 +13,9 @@
  * @link      http://iconocoders.com
  */
 namespace Iconocoders\OtpSimple\Model;
-use Iconocoders\OtpSimple\SDK\SimpleLiveUpdate;
-use \Otp\Simplepay\SimplePayStart;
+
+use Iconocoders\OtpSimple\SDK\v2\SimpleLiveUpdate;
+use Iconocoders\OtpSimple\SDK\v2\SimplePayStart;
 
 /**
  * SimpleObject
@@ -62,7 +63,6 @@ class SimpleObject
         $trx->addData('total', $order->getGrandTotal());
         $trx->addData('orderRef', $order->getIncrementId()); ###
 
-
         $trx->addData('customer', $address->getCustomerName() ); ###
         if ($address->getEmail()) $trx->addData('customerEmail', trim($address->getEmail())); ###
         $trx->addData('language', strtolower(strstr($resolver->getLocale(), '_', true))=='hu' ? 'HU' : 'EN'); ###
@@ -85,13 +85,14 @@ class SimpleObject
             if (!empty($street[1])) $trx->addGroupData('invoice', 'address2', $street[1]); ###
             if ($address->getTelephone()) $trx->addGroupData('invoice', 'phone', $address->getTelephone()); ###
         }
+
         $trx->formDetails['element'] = 'button';
         $trx->runStart();
         $this->trx_result = $trx->getReturnData();
+
         return;
 
     }
-
 
     /**
      * Redirect

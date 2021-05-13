@@ -225,7 +225,7 @@ class Data extends AbstractHelper
      */
     public function getConfiguration()
     {
-        $protocol = 'https';
+        //$protocol = 'https';
         $baseURL = $this->urlBuilder->getBaseUrl();
 
         $logPath = $this->dir->getPath('var').'/simplepay';
@@ -235,8 +235,7 @@ class Data extends AbstractHelper
 
         $currency = $this->currency ? $this->currency : 'HUF';
 
-        $config = [
-
+        return [
             $currency.'_MERCHANT' => $this->getMerchant($this->storeId),
             $currency.'_SECRET_KEY' => $this->getSecretKey($this->storeId),
 
@@ -254,8 +253,6 @@ class Data extends AbstractHelper
 
             'AUTOCHALLENGE' => true,                      //in case of unsuccessful payment with registered card run automatic challange
         ];
-
-        return $config;
     }
 
     /**
