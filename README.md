@@ -51,13 +51,14 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
    fizetés sikeres volt-e. 
 
 ----------
-> **v3.0.0-beta1:**
+> **v3.0.0-beta3:**
 >
 > - OTP Simplepay API v2 támogatás
 > - Magento 2.4.x támogatás
 > - Hibajavítások, optimalizálások
 > - a 3.0.0 verzió esetében nem támogatjuk a 2.3.3 és régebbi verziókat
 > - Magento 2.3.3 és régebbi verzió esetén a támogatott modul verzió: 2.3.6
+> - OTP Simplepay API v1 használata esetén a támogatott modul verzió: 2.3.6
 
 >
 > **v2.3.51:**
