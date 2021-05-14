@@ -27,7 +27,7 @@
     "iconocoders/otp-simple-sdk": "2.2.0"
   },
   "type": "magento2-module",
-  "version": "3.0.1-beta",
+  "version": "3.0.1-beta2",
   "license": [
     "MIT"
   ],
