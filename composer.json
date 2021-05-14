@@ -30,6 +30,16 @@
   "license": [
     "MIT"
   ],
+  "funding": [
+      {
+          "type": "patreon",
+          "url": "https://www.patreon.com/iconocoders"
+      },
+      {
+          "type": "other",
+          "url": "https://paypal.me/webpositive"
+      }
+  ],
   "autoload": {
     "files": [
       "registration.php"
