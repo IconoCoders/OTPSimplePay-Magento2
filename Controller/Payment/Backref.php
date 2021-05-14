@@ -14,6 +14,7 @@
  */
 namespace Iconocoders\OtpSimple\Controller\Payment;
 
+use Iconocoders\OtpSimple\SDK\v2\SimplePayBack;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\View\Result\PageFactory;
@@ -132,7 +133,7 @@ class Backref extends Action
 
         $config = $this->dataHelper->getConfiguration();
 
-        $trx = new \Simplepay\V2\SimplePayBack;
+        $trx = new SimplePayBack();
         $trx->addConfig($config);
         //$result = array();
 

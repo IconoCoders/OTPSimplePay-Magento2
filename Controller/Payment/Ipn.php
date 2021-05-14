@@ -14,6 +14,7 @@
  */
 namespace Iconocoders\OtpSimple\Controller\Payment;
 
+use Iconocoders\OtpSimple\SDK\v2\SimplePayIpn;
 use Magento\Framework\App\Action\Context;
 use Iconocoders\OtpSimple\Helper\Data as DataHelper;
 use Magento\Framework\App\CsrfAwareActionInterface;
@@ -134,7 +135,7 @@ class Ipn extends Action implements CsrfAwareActionInterface
 
         $json = file_get_contents('php://input');
         $values = json_decode($json, true);
-        $trx = new \Simplepay\V2\SimplePayIpn;
+        $trx = new SimplePayIpn();
         $trx->addConfig($config);
 
         if ($trx->isIpnSignatureCheck($json)) {

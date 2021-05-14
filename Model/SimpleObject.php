@@ -14,7 +14,7 @@
  */
 namespace Iconocoders\OtpSimple\Model;
 
-use SimplePayStart;
+use Iconocoders\OtpSimple\SDK\v2\SimplePayStart;
 
 /**
  * SimpleObject
