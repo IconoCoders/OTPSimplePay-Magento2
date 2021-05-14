@@ -51,17 +51,26 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
    fizetés sikeres volt-e. 
 
 ----------
-> **v.2.3.51:**
+> **v3.0.0-beta1:**
+>
+> - OTP Simplepay API v2 támogatás
+> - Magento 2.4.x támogatás
+> - Hibajavítások, optimalizálások
+> - a 3.0.0 verzió esetében nem támogatjuk a 2.3.3 és régebbi verziókat
+> - Magento 2.3.3 és régebbi verzió esetén a támogatott modul verzió: 2.3.6
+
+>
+> **v2.3.51:**
 >
 > - Licensz fixek
 > - Verzió fixek
 
 >
-> **v.2.3.5:**
+> **v2.3.5:**
 >
 > - Meghallgattuk az igényeket, a modult ÚJRA ingyenesen elérhetővé tesszük a Githubob és több támogatási formát alakítunk ki. Ezzel egyidejűleg megváltozik a modul licenszelése is.
 > 
-> **v.2.3.3:**
+> **v2.3.3:**
 >
 >> - **Fontos:** A 2.3.3 verziótól kezdődően jogos érdekek miatt (a modul lincszek megszegése, hibakezelések biztosítása)
 >   a modulban elhelyzésre került egy külső tracking script.
@@ -75,15 +84,15 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
 > - Composer verzió javítása, modul verzió javítása
 > - COPYRIGHT blokkok frissítése
 
-> **v.2.3.2:**
+> **v2.3.2:**
 >
 > - Fix virtual order
 
-> **v.2.3.1:**
+> **v2.3.1:**
 >
 > - LOG_PATH Fix
 
-> **v.2.3.0:**
+> **v2.3.0:**
 > - **Fontos:** a 2.3.0 verziótól a 2.2.x és régebbi Magento verziók nem támogatottak!
 > - Kijavít egy hibát, ami miatt a BACKREF Internal Error 500-as hibára futott amennyiben nem volt az url-ben `ctrl` vagy `RC` paraméter
 > - Kijavít egy hibát, ami miatt a BACKREF Internal Error 500-as hibára futhatott mixelt protokoll miatt (http/https) -> mostantól csak a `https` protokoll támogatott
@@ -96,15 +105,15 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
 > - Az OTP Simple által tesztelt, jóváhagyott verzió
 > - COPYRIGHT blokkok frissítése
 
-> **v.2.2.0:**
+> **v2.2.0:**
 >
 > - Fix MAGE2.3 support, update minimum php version
 
-> **v.2.1.1.1:**
+> **v2.1.1.1:**
 >
 > - Támogatási információk (PRODUCT_SUPPORT.md - v1.0.0)
 
-> **v.2.1.1:**
+> **v2.1.1:**
 >
 > - Amennyiben a fizetés megszakadt, vagy sikertelen lett, a kosár
 eredeti tartalma visszaállításra kerül
@@ -116,7 +125,7 @@ eredeti tartalma visszaállításra kerül
 > - Alapértelmezett README: magyar
 > - Copyright blokkok frissítése
 
-> **v.2.1.0:**
+> **v2.1.0:**
 >
 > - A sikertelen vagy megszakított tranzakciók megfelelően visszairányítanak az időtúllépéses oldalra
 > - Az admin beállítások között most már meg lehet adni instrukciókat, amelyek megjelennek a felhasználónak, amikor az kiválasztja ezt a fizetési módot. Ez egy jó hely az OTP által kötelezően előírt adattovábbítási nyilatkozat megjelentetéséhez.
@@ -127,7 +136,7 @@ eredeti tartalma visszaállításra kerül
 > - A modul által megjelenített üzenetek át lettek írva, hogy összhangban legyenek az OTP jelenlegi követelményeivel.
 > - Magento 2 kompatibilitás: 2.0.9 - 2.2.7
 
-> **v.2.0.0:**
+> **v2.0.0:**
 >
 > - Publikus stabil verzió
 > - Magento2 kompatibilitás: 2.0.9 - 2.2.1
@@ -135,7 +144,7 @@ eredeti tartalma visszaállításra kerül
 > **Függőségek:**
 
 > - Composer
-> - Magento2 (2.0.9 - 2.2.1)
+> - Magento2 (2.0.9 - 2.4.x)
 
 #### Telepítés
 
