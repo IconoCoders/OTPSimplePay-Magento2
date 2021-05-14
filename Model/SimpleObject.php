@@ -14,19 +14,13 @@
  */
 namespace Iconocoders\OtpSimple\Model;
 
-//use Iconocoders\OtpSimple\SDK\v2\SimpleLiveUpdate;
-use \Simplepay\V2\SimplePayStart;
+use Simplepay\V2\SimplePayStart;
 
 /**
  * SimpleObject
  */
 class SimpleObject
 {
-    /**
-     * @var \Iconocoders\OtpSimple\Model\SimpleLiveUpdate;
-     */
-   // private $simpleLiveUpdate;
-
     /**
      * @var \Iconocoders\OtpSimple\Helper\Data
      */
@@ -97,16 +91,5 @@ class SimpleObject
         $this->trx_result = $trx->getReturnData();
 
         return;
-    }
-
-    /**
-     * Redirect
-     *
-     * @return string Redirect HTML
-     */
-    public function redirect()
-    {
-//        $display = $this->simpleLiveUpdate->createHtmlForm('SinglePayForm', 'auto');
-//        return '<div style="display: none;">'.$display.'</div>';
     }
 }
