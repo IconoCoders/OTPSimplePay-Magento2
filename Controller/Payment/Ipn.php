@@ -134,7 +134,7 @@ class Ipn extends Action implements CsrfAwareActionInterface
 
         $json = file_get_contents('php://input');
         $values = json_decode($json, true);
-        $trx = new \Iconocoders\OtpSimple\SDK\v2\SimplePayIpn;
+        $trx = new \Simplepay\V2\SimplePayIpn;
         $trx->addConfig($config);
 
         if ($trx->isIpnSignatureCheck($json)) {
@@ -150,7 +150,7 @@ class Ipn extends Action implements CsrfAwareActionInterface
             }
         }
     }
-    
+
     /**
      * Set Order Status
      *

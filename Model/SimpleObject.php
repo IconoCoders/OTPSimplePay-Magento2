@@ -15,7 +15,7 @@
 namespace Iconocoders\OtpSimple\Model;
 
 //use Iconocoders\OtpSimple\SDK\v2\SimpleLiveUpdate;
-use Iconocoders\OtpSimple\SDK\v2\SimplePayStart;
+use \Simplepay\V2\SimplePayStart;
 
 /**
  * SimpleObject

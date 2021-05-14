@@ -132,7 +132,7 @@ class Backref extends Action
 
         $config = $this->dataHelper->getConfiguration();
 
-        $trx = new \Iconocoders\OtpSimple\SDK\v2\SimplePayBack;
+        $trx = new \Simplepay\V2\SimplePayBack;
         $trx->addConfig($config);
         //$result = array();
 
