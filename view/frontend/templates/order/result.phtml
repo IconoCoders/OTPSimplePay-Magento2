@@ -16,20 +16,4 @@ the backref data for the previous order will be reused. Thus the customer gets t
             <b><?php /* @noEscape */ echo $backrefData['order_ref'] ?></b></br>
     <?php /* @noEscape */ echo __('Dátum:') ?>
             <b><?php /* @noEscape */ echo $backrefData['date'] ?></b></br>
-
-    <script>
-        if (typeof client.pushData !== 'undefined') {
-            console.log('pay2 client ready');
-
-            let shopOrder = {
-                meta_data: {
-                    orderStatus: 'result',
-                    orderStatusUrl: window.location.href,
-                    orderRef: <?php /* @noEscape */ echo $backrefData['order_ref'] ?>
-                }
-            };
-
-            client.pushData(shopOrder);
-        }
-    </script>
 <?php endif; ?>

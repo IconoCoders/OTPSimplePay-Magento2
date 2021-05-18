@@ -179,22 +179,21 @@ class Backref extends Action
     {
         $helper = $this->dataHelper;
         $provider = $this->configProvider;
-        $order = $this->order;
 
-        if ($order->getStatus() != $helper->getOrderStatus()) {
+        if ($this->order->getStatus() != $helper->getOrderStatus()) {
             $this->messageManager->addSuccess(
                 $this->lang=='hu' ? ("Sikeres tranzakció. SimplePay tranzakció azonosító: $transactionId. Megrendelés azonosító: ".$this->order->getIncrementId())
                                   : ("Successful transaction. SimplePay transaction identifier: $transactionId. Order reference: ".$this->order->getIncrementId())
 
                 );
 
-            $order->setStatus($helper->getOrderStatus());
-            $order->addStatusToHistory(
-                $order->getStatus(),
+            $this->order->setStatus($helper->getOrderStatus());
+            $this->order->addStatusToHistory(
+                $this->order->getStatus(),
                 'Order is waiting for IPN'
             );
 
-            $order->save();
+            $this->order->save();
         } else {
             $this->messageManager->addSuccess(
                     $this->lang=='hu' ? ("A rendelés már fel van dolgozva. SimplePay tranzakció azonosító: ".$transactionId)
@@ -213,11 +212,15 @@ class Backref extends Action
     protected function cancel($transactionId, $merchant)
     {
         $this->messageManager->addErrorMessage(
-            $this->lang=='hu' ? ("Ön megszakította a fizetést. SimplePay tranzakció azonosító: $transactionId")
-                              : ("You cancelled the payment, please try again. SimplePay transaction identifier: $transactionId")
+            $this->lang=='hu' ? ("Ön megszakította a fizetést. SimplePay tranzakció azonosító: $transactionId. Megrendelés azonosító: ".$this->order->getIncrementId())
+                              : ("You cancelled the payment, please try again. SimplePay transaction identifier: $transactionId. Order reference: ".$this->order->getIncrementId())
             );
 
-        return $this->_redirect('checkout/cart');
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
+        $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
+        $this->order->save();
+
+        return $this->_redirect('checkout/onepage/failure');
     }
 
     /**
@@ -230,11 +233,11 @@ class Backref extends Action
         $this->messageManager->addError(
             $this->lang == 'hu' ? (
                 "Sikertelen tranzakció. A rendelés nem lett kifizetve. " .
-                "SimplePay tranzakció azonosító: $transactionId " .
+                "SimplePay tranzakció azonosító: $transactionId. Megrendelés azonosító: ".$this->order->getIncrementId() .
                 "Kérjük, ellenőrizze a tranzakció során megadott adatok helyességét. Amennyiben minden adatot helyesen adott meg, a visszautasítás okának kivizsgálása érdekében kérjük, szíveskedjen kapcsolatba lépni kártyakibocsátó bankjával."
             ) : (
                 "Failed transaction. Your order has not been paid, please try again. " .
-                "SimplePay transaction identifier: $transactionId " .
+                "SimplePay transaction identifier: $transactionId. Order reference: ".$this->order->getIncrementId() .
                 "Please check if the details provided during the transaction are correct. If all of the details were provided correctly, please contact the bank that issued your card in order to investigate the cause of the rejection."
             )
         );
@@ -255,9 +258,9 @@ class Backref extends Action
     {
         $this->messageManager->addError(
             $this->lang == 'hu' ? ("Ön túllépte a tranzakció elindításának lehetséges maximális idejét, a rendelés nem lett kifizetve. " .
-                "SimplePay tranzakció azonosító: $transactionId "
+                "SimplePay tranzakció azonosító: $transactionId. Megrendelés azonosító: ".$this->order->getIncrementId()
             ) : ("Timeout, please try your payment again. " .
-                "SimplePay transaction identifier: $transactionId ")
+                "SimplePay transaction identifier: $transactionId. Order reference: ".$this->order->getIncrementId())
         );
 
         $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
