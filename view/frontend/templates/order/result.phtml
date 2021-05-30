@@ -7,13 +7,3 @@
 $backrefData = $block->getBackrefData();
 $customerSession = $block->customerSession();
 ?>
-<!-- Order id should be checked. Otherwise if a customer places an order and pays with card, then in the same session he places another order and picks another payment method
-the backref data for the previous order will be reused. Thus the customer gets this message again even though he didn't use his card this time. -->
-<?php if ($backrefData['order_ref'] == $customerSession['simple_order_increment_id']) : ?>
-    <?php /* @noEscape */ echo __('SimplePay tranzakció azonosító:') ?>
-            <b><?php /* @noEscape */ echo $backrefData['payrefno'] ?></b></br>
-    <?php /* @noEscape */ echo __('Megrendelés azonosító:') ?>
-            <b><?php /* @noEscape */ echo $backrefData['order_ref'] ?></b></br>
-    <?php /* @noEscape */ echo __('Dátum:') ?>
-            <b><?php /* @noEscape */ echo $backrefData['date'] ?></b></br>
-<?php endif; ?>
