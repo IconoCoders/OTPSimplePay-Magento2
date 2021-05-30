@@ -63,6 +63,13 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
 > - Backref javítások
 > - Layout fixek
 
+> **v2.3.6:**
+>
+> - Kijavítja az alábbi hibát: #ICOMG-2 - https://github.com/IconoCoders/OTPSimplePay-Magento2/issues/2
+> - Hamarosan megjelenik a modul 3.0-s verziója. Ezt azt jelenti, hogy Magento 2.3.3 és régebbi, illetve OTP Simplepay API v1 használata esetén
+>az utolsó támogatott verzió a 2.3.6 lesz. 
+> - A 2.3.X verzió ág javításokat és esetleges biztonsági frissítéseket 2021.08.31-ig kap.
+
 >
 > **v2.3.51:**
 >
