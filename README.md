@@ -53,7 +53,7 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
 ----------
 > **v3.0.0-beta5:**
 >
-> - Bacref javítások
+> - Backref javítások
 > - Layout fixek
 > 
 > **v3.0.0-beta3:**
