@@ -51,6 +51,11 @@ Ebben az esetben kérjünk nyiss egy új issue-t!
    fizetés sikeres volt-e. 
 
 ----------
+> **v3.0.0-beta5:**
+>
+> - Bacref javítások
+> - Layout fixek
+> 
 > **v3.0.0-beta3:**
 >
 > - OTP Simplepay API v2 támogatás
