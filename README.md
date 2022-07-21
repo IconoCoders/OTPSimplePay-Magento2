@@ -32,6 +32,12 @@ A modul megvásárolható: https://shrt.hu/m2o
    fizetés sikeres volt-e. 
 
 ----------
+> **v3.0.3:**
+>
+> - Magento 2.4.4. támogatás
+> - PHP8.1 támogatás
+
+> 
 > **v3.0.2:**
 >
 > - A modul mostantól csak és kizárólag fizetős verzióban érhető el
