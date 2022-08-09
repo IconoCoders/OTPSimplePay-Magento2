@@ -2,9 +2,9 @@
   "name": "iconocoders/magento2-otp-simple-payment",
   "type": "metapackage",
   "description": "Magento2 OTP Simple Payment",
-  "version": "3.0.2",
+  "version": "3.0.4",
   "require": {
-    "iconocoders/magento2-otp-simple-payment-v3": "3.0.2"
+    "iconocoders/magento2-otp-simple-payment-v3": "3.0.4"
   },
   "repositories": [
     {
