@@ -32,6 +32,10 @@ A modul megvásárolható: https://shrt.hu/m2o
    fizetés sikeres volt-e. 
 
 ----------
+> **v3.0.4:**
+>
+> - SimplePay_PHP_SDK_2.1.1_210804
+> 
 > **v3.0.3:**
 >
 > - Magento 2.4.4. támogatás
